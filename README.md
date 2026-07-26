@@ -193,6 +193,14 @@ We provide the experiment directories, including configs, logs, and checkpoints.
 | Volt-S | Waymo | 72.5 | [link](https://huggingface.co/KadirYilmaz/Volt/tree/main/Volt_experiments/joint_training_small/waymo) |
 | Volt-B | Waymo | 73.7 | [link](https://huggingface.co/KadirYilmaz/Volt/tree/main/Volt_experiments/joint_training_base/waymo) |
 
+### Instance Segmentation
+
+| Model | Dataset | Val mAP50 | Exp. Dir |
+| :--- | :--- | :---: | :---: |
+| Volt-S | ScanNet | 78.5 | [link](https://huggingface.co/KadirYilmaz/Volt/tree/main/Volt_experiments/instance_segmentation/scannet_volt_small) |
+| Volt-S | ScanNet200 | 49.0 | [link](https://huggingface.co/KadirYilmaz/Volt/tree/main/Volt_experiments/instance_segmentation/scannet200_volt_small) |
+| Volt-B | ScanNet++ | 53.1 | [link](https://huggingface.co/KadirYilmaz/Volt/tree/main/Volt_experiments/instance_segmentation/scannetpp_volt_base) |
+
 ## Citation
 
 If you use our work in your research, please use the following BibTeX entry.

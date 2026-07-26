@@ -39,7 +39,7 @@ model = dict(
         num_heads=6,
         mlp_ratio=4,
         init_values=None,
-        qk_norm=False,
+        qk_norm=True,
         drop_path=0.3,
         stride=5,
         kernel_size=5,
@@ -90,7 +90,7 @@ model = dict(
     nms=True,
 )
 
-optimizer = dict(type="AdamW", lr=0.0003, weight_decay=0.05)
+optimizer = dict(type="AdamW", lr=0.0003, weight_decay=0.1)
 scheduler = dict(type="PolyLR")
 
 dataset_type = "ScanNet200Dataset"
@@ -222,6 +222,7 @@ data = dict(
                 grid_size=0.02,
                 hash_type="fnv",
                 mode="train",
+                deterministic=True,
                 return_grid_coord=True,
                 return_inverse=True,
             ),

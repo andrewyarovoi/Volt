@@ -1,15 +1,17 @@
-_base_ = [
-    "../_base_/default_runtime.py",
-    "../_base_/dataset/scannetpp.py",
-]
+from pointcept.datasets.preprocessing.scannet.meta_data.scannet200_constants import (
+    CLASS_LABELS_200,
+    VALID_CLASS_IDS_200,
+)
 
-epoch = 200
+_base_ = ["../_base_/default_runtime.py"]
+
+epoch = 100
 eval_epoch = 100
 
-weight = "weights/volt-base-scannetpp.pth"
+weight = "weights/volt-base-scannet200.pth"
 
 batch_size = 8
-num_worker = 48
+num_worker = 16
 mix_prob = 0.8
 empty_cache = False
 enable_amp = True
@@ -18,10 +20,11 @@ clip_grad = 10.0
 evaluate = True
 find_unused_parameters = True
 
-# ScanNet++ keeps 100 raw semantic ids, but only 84 are instance-valid classes.
-num_classes = 100
-segment_ignore_index = (-1, 0, 1, 2, 16, 19, 20, 24, 26, 33, 36, 48, 53, 63, 64, 73, 74)
-semantic_num_classes = 84
+class_names = CLASS_LABELS_200
+class_ids = VALID_CLASS_IDS_200
+num_classes = len(class_names)
+segment_ignore_index = (-1, 0, 2)
+semantic_num_classes = 198
 num_channels = 256
 
 enable_wandb = True
@@ -48,7 +51,7 @@ model = dict(
         num_class=semantic_num_classes,
         in_channel=num_channels,
         num_layer=6,
-        num_query=800,
+        num_query=400,
         d_model=384,
         nhead=8,
         hidden_dim=1024,
@@ -81,7 +84,7 @@ model = dict(
     semantic_ignore_index=-1,
     segment_ignore_index=segment_ignore_index,
     instance_ignore_index=-1,
-    topk_insts=400,
+    topk_insts=100,
     score_thr=0.0,
     npoint_thr=100,
     nms=True,
@@ -90,18 +93,19 @@ model = dict(
 optimizer = dict(type="AdamW", lr=0.0003, weight_decay=0.1)
 scheduler = dict(type="PolyLR")
 
-dataset_type = "ScanNetPPDataset"
-data_root = "data/scannetpp"
+dataset_type = "ScanNet200Dataset"
+data_root = "data/scannet"
 
 data = dict(
     num_classes=num_classes,
     ignore_index=-1,
+    names=class_names,
+    ids=class_ids,
     train=dict(
         type=dataset_type,
         split="train",
         data_root=data_root,
         transform=[
-            dict(type="SphereCrop", point_max=1000000, mode="random"),
             dict(type="CenterShift", apply_z=True),
             dict(
                 type="RandomDropout", dropout_ratio=0.2, dropout_application_ratio=0.5
@@ -119,6 +123,7 @@ data = dict(
             dict(type="ChromaticTranslation", p=0.95, ratio=0.1),
             dict(type="ChromaticJitter", p=0.95, std=0.05),
             dict(type="SphereCrop", sample_rate=0.6, mode="random"),
+            dict(type="SphereCrop", point_max=102400, mode="random"),
             dict(
                 type="Copy",
                 keys_dict={
