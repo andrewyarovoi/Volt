@@ -16,3 +16,4 @@ outputs/
 **/*.out
 Dockerfile
 wandb/
+.venv

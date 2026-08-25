@@ -39,7 +39,6 @@ dependencies = [
 
     # Local Libs
     "pointops",
-    "pointgroup-ops",
     "pointseg",
 ]
 requires-python = "==3.12.*"
@@ -48,7 +47,7 @@ requires-python = "==3.12.*"
 required-environments = [
     "sys_platform == 'linux' and platform_machine == 'x86_64'"
 ]
-no-build-isolation-package = ["pointops", "pointgroup_ops", "pointseg"]
+no-build-isolation-package = ["pointops", "pointseg"]
 
 [project.optional-dependencies]
 notebook = [
@@ -69,7 +68,6 @@ torch-scatter = [{ index = "pyg-cu126" }]
 torch-cluster = [{ index = "pyg-cu126" }]
 
 pointops = [{ path = "libs/pointops" }]
-pointgroup-ops = [{ path = "libs/pointgroup_ops" }]
 pointseg = [{ path = "libs/pointseg" }]
 
 [[tool.uv.index]]
